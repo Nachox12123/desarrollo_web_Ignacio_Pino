@@ -1,0 +1,100 @@
+/* Fuente y fondo */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Contenedor principal */
+.main-container {
+    max-width: 700px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+/* Titulos */
+h1, h2, h3 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Inputs y selects */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="datetime-local"],
+textarea,
+select {
+    width: 100%;
+    padding: 8px;
+    margin: 6px 0 12px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Textarea más grande */
+textarea {
+    resize: vertical;
+}
+
+/* Botones */
+button, .btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+button:hover, .btn:hover {
+    background-color: #45a049;
+}
+
+/* Contenedor de fotos */
+#fotos-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Inputs de fotos */
+.foto-input {
+    display: block;
+}
+
+/* Imagenes de vista previa futura (si agregas preview) */
+#fotos-container img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Mensajes de validación */
+#val-box {
+    background-color: #ffdddd;
+    border-left: 6px solid #f44336;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+#val-box ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+/* Alineación general */
+label {
+    font-weight: bold;
+}

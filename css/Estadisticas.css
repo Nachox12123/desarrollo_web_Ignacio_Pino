@@ -1,0 +1,50 @@
+/* Fuente y fondo */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Títulos */
+h1 {
+    margin-bottom: 30px;
+}
+
+/* Contenedor de gráficos */
+.grafico {
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    display: inline-block;
+}
+
+/* Imágenes dentro de gráficos */
+.grafico img {
+    width: 100%;
+    max-width: 600px; /* Máximo tamaño */
+    height: auto;
+    border-radius: 5px;
+}
+
+/* Botones */
+.btn {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 30px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #45a049;
+}
