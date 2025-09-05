@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Adopción</title>
+    <link rel="stylesheet" type="text/css" href="../css/Formulario.css">
+</head>
+<body>
+    <div class="main-container">
+        <div id="val-box" hidden>
+        <div id="val-msg"></div>
+        <ul id="val-list"></ul>
+        </div>
+
+        <form name="myForm" id="myForm" method="post" enctype="multipart/form-data">
+
+
+            <h3>¿Dónde?</h3>
+            <label for="select-regiones">Región</label>
+            <select name="select-regiones" id="select-regiones" required>
+                <option value="" disabled selected>Seleccione una región</option>
+            </select><br>
+
+            <label for="select-comunas">Comuna</label>
+            <select name="select-comunas" id="select-comunas" required>
+                <option value="" disabled selected>Seleccione una comuna</option>
+            </select><br>
+
+            <label for="sector">Sector (opcional)</label>
+            <input type="text" name="sector" id="sector" maxlength="100"><br>
+
+
+
+            <h3>Contacto</h3>
+            <label for="nombre">Nombre</label>
+            <input type="text" name="nombre" id="nombre" minlength="3" maxlength="200" required><br>
+
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" maxlength="100" required><br>
+
+            <label for="phone">Número de celular</label>
+            <input type="tel" name="phone" id="phone" maxlength="100" placeholder="+56912345678"><br>
+
+            <label for="select-contacto">Contactar por</label>
+            <select name="select-contacto" id="select-contacto" required>
+                <option value="" disabled selected>Seleccione una opción</option>
+                
+            </select><br>
+
+            <label for="contact">ID de contacto o URL</label>
+            <input type="text" name="contact" id="contact" minlength="4" maxlength="50"><br>
+
+
+
+            <h3>Mascota en Adopción</h3>
+            <label for="select-tipo">Tipo</label>
+            <select name="select-tipo" id="select-tipo" required>
+                <option value="" disabled selected>Seleccione una opción</option>
+            </select><br>
+            
+            <label for="cantidad">Cantidad</label>
+            <input type="number" name="cantidad" id="cantidad" min="1" required><br>
+
+            <label for="edad">Edad</label>
+            <input type="number" name="edad" id="edad" min="0" required><br>
+
+            <label for="select-medida">Unidad medida edad</label>
+            <select name="select-medida" id="select-medida" required>
+                <option value="" disabled selected>Seleccione una medida</option>
+            </select><br>
+
+            <label for="entrega">Fecha disponible para entrega</label>
+            <input type="datetime-local" name="entrega" id="entrega" required><br>
+
+            <label for="descripcion">Descripción</label>
+            <textarea name="descripcion" id="descripcion" rows="4" cols="50" maxlength="500"></textarea><br>
+            
+            <!-- Fotos -->
+            <h3>Fotos</h3>
+            <div id="fotos-container">
+                <input type="file" name="files" class="foto-input" accept="image/*" required>
+            </div>
+            <button type="button" id="add-photo-btn">Agregar otra foto</button><br><br>
+
+            <!-- Botón -->
+            <button type="button" id="submit-btn">Agregar este aviso de adopción</button>
+        </form>
+    </div>
+
+    <script src="../js/select.js"></script>
+    <script src="../js/validation.js"></script>
+</body>
+</html>

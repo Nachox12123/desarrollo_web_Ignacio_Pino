@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Detalle Aviso de Adopción</title>
+    <link rel="stylesheet" type="text/css" href="../css/Detalle.css">
+</head>
+<body>
+  <h1>Detalle del Aviso de Adopción</h1>
+
+  <div class="info">
+    <p><strong>Fecha Publicación:</strong> 2025-09-01</p>
+    <p><strong>Fecha Entrega:</strong> 2025-09-15</p>
+    <p><strong>Comuna:</strong> Santiago</p>
+    <p><strong>Sector:</strong> Centro</p>
+    <p><strong>Cantidad / Tipo / Edad:</strong> 1 / Perro / 2 meses</p>
+    <p><strong>Nombre:</strong> Firulais</p>
+    <p><strong>Contacto:</strong> Juan Pérez - 987654321</p>
+  </div>
+
+  <div class="fotos">
+    <h3>Fotos:</h3>
+    <img src="../imagenes/Mascota1.webp" alt="Foto 1 de la mascota" onclick="mostrarFoto(this.src)">
+    <img src="../imagenes/Mascota1_2.jpg" alt="Foto 2 de la mascota" onclick="mostrarFoto(this.src)">
+    <img src="../imagenes/Mascota1_3.jpg" alt="Foto 3 de la mascota" onclick="mostrarFoto(this.src)">
+  </div>
+
+  <button class="btn" onclick="window.location.href='listado.html'">Volver al listado</button>
+  <button class="btn" onclick="window.location.href='Portada.html'">Volver a la portada</button>
+
+
+  <div id="modal">
+    <div>
+      <img id="modal-img" src="../imagenes/Mascota1.webp" alt="Imagen ampliada">
+      <div style="text-align:center;">
+        <button class="btn" onclick="cerrarFoto()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function mostrarFoto(src) {
+      document.getElementById("modal-img").src = src.replace("320/240", "800/600");
+      document.getElementById("modal").style.display = "flex";
+    }
+    function cerrarFoto() {
+      document.getElementById("modal").style.display = "none";
+    }
+  </script>
+</body>
+</html>
