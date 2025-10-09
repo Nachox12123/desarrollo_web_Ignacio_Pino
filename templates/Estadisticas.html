@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Estadísticas de Adopción</title>
-    <link rel="stylesheet" type="text/css" href="../css/Estadisticas.css">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/Estadisticas.css') }}">
 </head>
 <body>
   <h1>Estadísticas de Avisos de Adopción</h1>
@@ -20,6 +20,6 @@
     <img src="../imagenes/Grafico3.jpg" alt="Gráfico de barras" width="600">
   </div>
 
-  <a href="Portada.html" class="btn">Volver a la Portada</a>
+  <a href="{{ url_for('portada') }}" class="btn">Volver a la Portada</a>
 </body>
 </html>

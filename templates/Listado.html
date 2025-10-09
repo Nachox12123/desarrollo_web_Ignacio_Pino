@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Portada Adopciones</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/Listado.css') }}">
+</head>
+<body>
+  <h1>Listado de Avisos de Adopción</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Fecha Publicación</th>
+        <th>Fecha Entrega</th>
+        <th>Comuna</th>
+        <th>Sector</th>
+        <th>Cantidad</th>
+        <th>Tipo</th>
+        <th>Edad</th>
+        <th>Nombre</th>
+        <th>Contacto</th>
+        <th>Total Fotos</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for aviso in avisos %}
+      <tr onclick="location.href='{{ url_for('detalle_aviso', aviso_id=aviso.id) }}'">
+        <td>{{ aviso.fecha_ingreso.strftime('%Y-%m-%d %H:%M') }}</td>
+        <td>{{ aviso.fecha_entrega.strftime('%Y-%m-%d %H:%M') }}</td>
+        <td>{{ aviso.comuna.nombre }}</td>
+        <td>{{ aviso.sector }}</td>
+        <td>{{ aviso.cantidad }}</td>
+        <td>{{ aviso.tipo }}</td>
+        <td>{{ aviso.edad }} {{ aviso.unidad_medida }}</td>
+        <td>{{ aviso.nombre }}</td>
+        <td>
+          {% for c in aviso.contactos %}
+            {{ c.tipo }}: {{ c.info }}<br>
+          {% endfor %}
+        </td>
+        <td>{{ aviso.fotos|length }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="paginacion">
+    {% if pagina > 1 %}
+      <a href="{{ url_for('listado', page=pagina-1) }}">Anterior</a>
+    {% endif %}
+    <span>Página {{ pagina }} de {{ paginas }}</span>
+    {% if pagina < paginas %}
+      <a href="{{ url_for('listado', page=pagina+1) }}">Siguiente</a>
+    {% endif %}
+  </div>
+
+  <a href="{{ url_for('portada') }}">Volver a la portada</a>
+</body>
+</html>

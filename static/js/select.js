@@ -41,15 +41,17 @@ const updateComuna = () => {
   comunaSelect.innerHTML = '<option value="">Seleccione una Comuna</option>';
 
   if (data[selectedRegion]) {
-    data[selectedRegion].forEach((comuna) => {
+    data[selectedRegion].forEach((comuna, index) => {
       const option = document.createElement("option");
-      option.value = comuna;
+      option.value = index;  // enviamos un número
       option.textContent = comuna;
       comunaSelect.appendChild(option);
     });
   }
+
   changeArguments();
 };
+
 
 function changeArguments() {
   const comunaSelect = document.getElementById("select-comunas");

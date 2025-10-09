@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Detalle Aviso de Adopción</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/Detalle.css') }}">
+</head>
+<body>
+  <h1>Detalle del Aviso de Adopción</h1>
+
+  <div class="info">
+    <p><strong>Fecha Publicación:</strong> {{ aviso.fecha_ingreso.strftime('%Y-%m-%d') }}</p>
+    <p><strong>Fecha Entrega:</strong> {{ aviso.fecha_entrega.strftime('%Y-%m-%d') }}</p>
+    <p><strong>Comuna:</strong> {{ aviso.comuna.nombre }}</p>
+    <p><strong>Sector:</strong> {{ aviso.sector }}</p>
+    <p><strong>Cantidad / Tipo / Edad:</strong> {{ aviso.cantidad }} / {{ aviso.tipo }} / {{ aviso.edad }} {{ aviso.unidad_medida }}</p>
+    <p><strong>Nombre:</strong> {{ aviso.nombre }}</p>
+    <p><strong>Contacto:</strong>
+      {% for contacto in contactos %}
+        {{ contacto.tipo_contacto }}: {{ contacto.valor }}<br>
+      {% endfor %}
+    </p>
+    <p><strong>Email:</strong> {{ aviso.email }}</p>
+    <p><strong>Celular:</strong> {{ aviso.celular }}</p>
+    <p><strong>Descripción:</strong> {{ aviso.descripcion }}</p>
+  </div>
+
+  <div class="fotos">
+    <h3>Fotos:</h3>
+    {% for foto in fotos %}
+      <img src="{{ url_for('static', filename='uploads/' ~ foto.filename) }}" alt="Foto de la mascota" onclick="mostrarFoto(this.src)">
+    {% endfor %}
+  </div>
+
+  <div class="botones">
+   <a href="{{ url_for('listado', page=1) }}" class="btn">Volver al listado</a>
+    <a href="{{ url_for('portada') }}" class="btn">Volver a la portada</a>
+  </div>
+
+  <div id="modal" style="display:none;">
+    <div>
+      <img id="modal-img" src="" alt="Imagen ampliada">
+      <div style="text-align:center;">
+        <button class="btn" onclick="cerrarFoto()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function mostrarFoto(src) {
+      document.getElementById("modal-img").src = src;
+      document.getElementById("modal").style.display = "flex";
+    }
+    function cerrarFoto() {
+      document.getElementById("modal").style.display = "none";
+    }
+  </script>
+</body>
+</html>

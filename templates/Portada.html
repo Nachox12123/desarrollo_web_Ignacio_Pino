@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Portada Adopciones</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/Portada.css') }}">
+</head>
+<body>
+  <h1>{{ mensaje_bienvenida }}</h1>
+  <nav>
+    <ul>
+      {% for item in menu %}
+        <li><a href="{{ item.url }}">{{ item.nombre }}</a></li>
+      {% endfor %}
+    </ul>
+  </nav>
+
+  <h2>Últimos avisos de adopción</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Fecha publicación</th>
+        <th>Comuna</th>
+        <th>Sector</th>
+        <th>Cantidad</th>
+        <th>Tipo</th>
+        <th>Edad</th>
+        <th>Foto</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for aviso in avisos %}
+      <tr onclick="location.href='{{ url_for('detalle_aviso', aviso_id=aviso.id) }}'">
+        <td>{{ aviso.fecha_ingreso.strftime('%Y-%m-%d %H:%M') }}</td>
+        <td>{{ aviso.comuna.nombre }}</td>
+        <td>{{ aviso.sector }}</td>
+        <td>{{ aviso.cantidad }}</td>
+        <td>{{ aviso.tipo }}</td>
+        <td>{{ aviso.edad }} {{ aviso.unidad_medida }}</td>
+        <td>
+          {% if aviso.fotos %}
+            <img src="{{ url_for('static', filename='uploads/' ~ aviso.fotos[0].archivo) }}" alt="Foto de {{ aviso.nombre }}">
+          {% else %}
+            <span>No hay foto</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>

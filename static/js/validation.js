@@ -102,13 +102,23 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const submitBtn = document.getElementById("submit-btn");
-  submitBtn.addEventListener("click", () => {
-    if (validateForm()) {
-      let seguro = confirm("¿Está seguro que desea agregar este aviso de adopción?");
-      if (seguro) {
-        alert("Hemos recibido la información de adopción, muchas gracias y suerte!");
-        window.location.href = "Portada.html";
-      }
+  document.getElementById("myForm").addEventListener("submit", function(e) {
+    // Validación del formulario
+    if (!validateForm()) {
+        e.preventDefault(); // evita enviar si hay errores
+        return;
     }
-  });
+
+    // Confirmación antes de enviar
+    let seguro = confirm("¿Está seguro que desea agregar este aviso de adopción?");
+    if (!seguro) {
+        e.preventDefault(); // evita enviar si el usuario cancela
+        return;
+    }
+
+    // Alerta antes de enviar
+    alert("Hemos recibido la información de adopción, muchas gracias y suerte!");
+    // El formulario se enviará automáticamente a Flask después de esta alerta
+});
+
 });
