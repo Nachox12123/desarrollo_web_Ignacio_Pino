@@ -43,7 +43,7 @@ const updateComuna = () => {
   if (data[selectedRegion]) {
     data[selectedRegion].forEach((comuna, index) => {
       const option = document.createElement("option");
-      option.value = index;  // enviamos un número
+      option.value = index;  
       option.textContent = comuna;
       comunaSelect.appendChild(option);
     });

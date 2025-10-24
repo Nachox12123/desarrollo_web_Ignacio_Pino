@@ -103,22 +103,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const submitBtn = document.getElementById("submit-btn");
   document.getElementById("myForm").addEventListener("submit", function(e) {
-    // Validación del formulario
     if (!validateForm()) {
-        e.preventDefault(); // evita enviar si hay errores
+        e.preventDefault(); 
         return;
     }
 
     // Confirmación antes de enviar
     let seguro = confirm("¿Está seguro que desea agregar este aviso de adopción?");
     if (!seguro) {
-        e.preventDefault(); // evita enviar si el usuario cancela
+        e.preventDefault(); 
         return;
     }
 
-    // Alerta antes de enviar
     alert("Hemos recibido la información de adopción, muchas gracias y suerte!");
-    // El formulario se enviará automáticamente a Flask después de esta alerta
+  
 });
 
 });
