@@ -25,3 +25,23 @@ Hola sobre mi tarea 2:
 - Tuve problemas con el Formulario, me entregaba que la comuna era None
 - En Portada.html me sale este error: "';' expected.javascript", la verdad no estoy seguro que es pero investigue y dice que es confucion del vscode
 - en uploads hay una carpeta imagenes, porque ahi tengo las imagenes de la tarea pasada
+
+
+Hola sobre mi tarea 3:
+
+## Estructura
+- /templates → HTML (Detalle.html actualizado con comentarios y Estadisticas.html)
+- /static/css → (nuevos Detalle.css y Estadisticas.css para comentarios y graficos)
+- /static/js → validation.js actualizado con validaciones de comentarios
+- /database → mismos archivos SQL, nueva tabla comentario se crea automaticamente
+- app.py → nuevas APIs y modelo Comentario
+
+# Detalles
+- Implemente sistema de comentarios completo en pagina de detalle
+- Nueva pagina de estadisticas con 3 graficos: linea (avisos por dia), torta (por tipo mascota), barras (por mes y tipo)
+- Use Flot Charts para los graficos, se cargan con fetch API
+- Todas las operaciones de comentarios son asincronas con JavaScript
+- Validacion en tiempo real para comentarios 
+- Las validaciones de comentarios estan en validation.js para mejor organizacion
+- Los graficos muestran datos de los ultimos 30 dias/12 meses segun corresponda
+

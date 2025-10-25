@@ -3,23 +3,181 @@
 <head>
   <meta charset="UTF-8">
   <title>Estadísticas de Adopción</title>
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/Estadisticas.css') }}">
+  <link rel="stylesheet" type="text/css" href="static/css/Estadisticas.css">
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.pie.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.categories.min.js"></script>
 </head>
+
+
 <body>
   <h1>Estadísticas de Avisos de Adopción</h1>
 
   <div class="grafico">
-    <img src="../imagenes/Grafico1.jpg" alt="Gráfico de líneas" width="600">
+    <h2>Avisos por Día</h2>
+    <div id="grafico-lineas" style="width: 800px; height: 400px;"></div>
   </div>
 
   <div class="grafico">
-    <img src="../imagenes/Grafico2.jpg" alt="Gráfico de torta" width="400">
+    <h2>Avisos por Tipo de Mascota</h2>
+    <div id="grafico-torta" style="width: 400px; height: 400px; margin: 0 auto;"></div>
   </div>
 
   <div class="grafico">
-    <img src="../imagenes/Grafico3.jpg" alt="Gráfico de barras" width="600">
+    <h2>Avisos por Mes y Tipo</h2>
+    <div id="grafico-barras" style="width: 800px; height: 400px;"></div>
+  </div>
+
+  <div class="loading" id="loading" style="display: none;">
+    <p>Cargando estadísticas...</p>
+  </div>
+
+  <div class="error" id="error" style="display: none; color: red;">
+    <p>Error al cargar las estadísticas. Por favor, intente nuevamente.</p>
   </div>
 
   <a href="{{ url_for('portada') }}" class="btn">Volver a la Portada</a>
+
+  <script>
+    function mostrarLoading() {
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('error').style.display = 'none';
+    }
+
+    function ocultarLoading() {
+      document.getElementById('loading').style.display = 'none';
+    }
+    function mostrarError() {
+      document.getElementById('error').style.display = 'block';
+      ocultarLoading();
+    }
+
+    function cargarGraficoLineas() {
+      fetch('/api/estadisticas/por_dia')
+        .then(response => {
+          if (!response.ok) throw new Error('Error en la respuesta');
+          return response.json();
+        })
+        .then(data => {
+          const serieData = data.map((item, index) => [index, item.cantidad]);
+          const labels = data.map(item => item.fecha);
+          
+          $.plot("#grafico-lineas", [serieData], {
+            series: {
+              lines: { show: true },
+              points: { show: true }
+            },
+            grid: { hoverable: true },
+            xaxis: {
+              ticks: labels.map((label, index) => [index, label]),
+              mode: "categories"
+            },
+            yaxis: {
+              min: 0
+            }
+          });
+        })
+        .catch(error => {
+          console.error('Error cargando gráfico de líneas:', error);
+          mostrarError();
+        });
+    }
+    function cargarGraficoTorta() {
+      fetch('/api/estadisticas/por_tipo')
+        .then(response => {
+          if (!response.ok) throw new Error('Error en la respuesta');
+          return response.json();
+        })
+        .then(data => {
+          const serieData = data.map(item => ({
+            label: item.tipo.charAt(0).toUpperCase() + item.tipo.slice(1),
+            data: item.cantidad
+          }));
+          
+          $.plot("#grafico-torta", serieData, {
+            series: {
+              pie: {
+                show: true,
+                radius: 1,
+                label: {
+                  show: true,
+                  radius: 2/3,
+                  formatter: function(label, series) {
+                    return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">' + 
+                           label + '<br/>' + Math.round(series.percent) + '%</div>';
+                  },
+                  background: { opacity: 0.5 }
+                }
+              }
+            },
+            legend: { show: false }
+          });
+        })
+        .catch(error => {
+          console.error('Error cargando gráfico de torta:', error);
+          mostrarError();
+        });
+    }
+
+    function cargarGraficoBarras() {
+      fetch('/api/estadisticas/por_mes_tipo')
+        .then(response => {
+          if (!response.ok) throw new Error('Error en la respuesta');
+          return response.json();
+        })
+        .then(data => {
+          const mesesMap = new Map();
+          data.forEach(item => {
+            const mesKey = `${item.año}-${String(item.mes).padStart(2, '0')}`;
+            if (!mesesMap.has(mesKey)) {
+              mesesMap.set(mesKey, {
+                label: item.mes_nombre,
+                gato: 0,
+                perro: 0
+              });
+            }
+            mesesMap.get(mesKey)[item.tipo] = item.cantidad;
+          });
+
+          const meses = Array.from(mesesMap.values());
+          const serieGatos = meses.map((mes, index) => [index, mes.gato]);
+          const seriePerros = meses.map((mes, index) => [index, mes.perro]);
+          const labels = meses.map((mes, index) => [index, mes.label]);
+
+          $.plot("#grafico-barras", [
+            { data: serieGatos, label: "Gatos", bars: { show: true, barWidth: 0.3, align: "left" } },
+            { data: seriePerros, label: "Perros", bars: { show: true, barWidth: 0.3, align: "right" } }
+          ], {
+            xaxis: {
+              ticks: labels,
+              mode: "categories"
+            },
+            yaxis: {
+              min: 0
+            },
+            grid: { hoverable: true },
+            legend: { position: "ne" }
+          });
+        })
+        .catch(error => {
+          console.error('Error cargando gráfico de barras:', error);
+          mostrarError();
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      mostrarLoading();
+      
+      Promise.all([
+        cargarGraficoLineas(),
+        cargarGraficoTorta(),
+        cargarGraficoBarras()
+      ]).finally(() => {
+        ocultarLoading();
+      });
+    });
+  </script>
 </body>
 </html>

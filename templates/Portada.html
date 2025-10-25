@@ -39,7 +39,7 @@
         <td>{{ aviso.edad }} {{ aviso.unidad_medida }}</td>
         <td>
           {% if aviso.fotos %}
-            <img src="{{ url_for('static', filename='uploads/' ~ aviso.fotos[0].archivo) }}" alt="Foto de {{ aviso.nombre }}">
+            <img src="{{ url_for('static', filename='uploads/' ~ aviso.fotos[0].ruta_archivo) }}" alt="Foto de {{ aviso.nombre }}">
           {% else %}
             <span>No hay foto</span>
           {% endif %}

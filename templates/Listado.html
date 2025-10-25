@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Portada Adopciones</title>
+  <title>Listado de Adopciones</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/Listado.css') }}">
 </head>
 <body>
@@ -34,8 +34,8 @@
         <td>{{ aviso.edad }} {{ aviso.unidad_medida }}</td>
         <td>{{ aviso.nombre }}</td>
         <td>
-          {% for c in aviso.contactos %}
-            {{ c.tipo }}: {{ c.info }}<br>
+          {% for contacto in aviso.contactos %}
+            {{ contacto.nombre }}: {{ contacto.identificador }}<br>
           {% endfor %}
         </td>
         <td>{{ aviso.fotos|length }}</td>

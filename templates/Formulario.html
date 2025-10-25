@@ -7,12 +7,12 @@
 </head>
 <body>
     <div class="main-container">
-        <div id="val-box" hidden>
+        <div id="val-box" style="display: none;">
             <div id="val-msg"></div>
             <ul id="val-list"></ul>
         </div>
 
-        <form name="myForm" id="myForm" method="post" action="{{ url_for('agregar_aviso') }}" enctype="multipart/form-data">
+        <form name="myForm" id="myForm" method="post" action="{{ url_for('add_aviso') }}" enctype="multipart/form-data">
           
             <h1>Formulario de Aviso de Adopción</h1>
 
@@ -26,7 +26,7 @@
             </select><br>
 
             <label for="select-comunas">Comuna</label>
-            <select name="comuna" id="select-comunas" required>
+            <select name="comuna_id" id="select-comunas" required>
                 <option value="" disabled selected>Seleccione una comuna</option>
                 {% for comuna in comunas %}
                     <option value="{{ comuna.id }}">{{ comuna.nombre }}</option>
@@ -44,11 +44,17 @@
             <input type="email" name="email" id="email" maxlength="100" required><br>
 
             <label for="phone">Número de celular</label>
-            <input type="tel" name="phone" id="phone" maxlength="100" placeholder="+56912345678"><br>
+            <input type="tel" name="celular" id="phone" maxlength="100" placeholder="+56912345678"><br>
 
             <label for="select-contacto">Contactar por</label>
             <select name="select-contacto" id="select-contacto" required>
                 <option value="" disabled selected>Seleccione una opción</option>
+                <option value="whatsapp">WhatsApp</option>
+                <option value="telegram">Telegram</option>
+                <option value="X">X (Twitter)</option>
+                <option value="instagram">Instagram</option>
+                <option value="tiktok">TikTok</option>
+                <option value="otra">Otra</option>
             </select><br>
 
             <label for="contact">ID de contacto o URL</label>
@@ -56,8 +62,10 @@
 
             <h3>Mascota en Adopción</h3>
             <label for="select-tipo">Tipo</label>
-            <select name="select-tipo" id="select-tipo" required>
+            <select name="tipo" id="select-tipo" required>
                 <option value="" disabled selected>Seleccione una opción</option>
+                <option value="perro">Perro</option>
+                <option value="gato">Gato</option>
             </select><br>
             
             <label for="cantidad">Cantidad</label>
@@ -67,12 +75,14 @@
             <input type="number" name="edad" id="edad" min="0" required><br>
 
             <label for="select-medida">Unidad medida edad</label>
-            <select name="select-medida" id="select-medida" required>
+            <select name="unidad_medida" id="select-medida" required>
                 <option value="" disabled selected>Seleccione una medida</option>
+                <option value="m">Meses</option>
+                <option value="a">Años</option>
             </select><br>
 
             <label for="entrega">Fecha disponible para entrega</label>
-            <input type="datetime-local" name="entrega" id="entrega" required><br>
+            <input type="datetime-local" name="fecha_entrega" id="entrega" required><br>
 
             <label for="descripcion">Descripción</label>
             <textarea name="descripcion" id="descripcion" rows="4" cols="50" maxlength="500"></textarea><br>
@@ -88,7 +98,7 @@
     </div>
 
     <script src="{{ url_for('static', filename='js/select.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/Validation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/validation.js') }}"></script>
 </body>
 </html>
 

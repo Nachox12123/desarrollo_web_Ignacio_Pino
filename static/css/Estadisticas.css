@@ -48,3 +48,39 @@ h1 {
 .btn:hover {
     background-color: #45a049;
 }
+
+/* Estilos para estados de carga y error */
+.loading {
+    background-color: #e7f3ff;
+    color: #0056b3;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 20px auto;
+    max-width: 400px;
+    border: 1px solid #b8daff;
+}
+
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 20px auto;
+    max-width: 400px;
+    border: 1px solid #f5c6cb;
+}
+
+/* Mejorar la presentación de los gráficos */
+.grafico h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #2c3e50;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 10px;
+}
+
+.grafico div[id*="grafico"] {
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}

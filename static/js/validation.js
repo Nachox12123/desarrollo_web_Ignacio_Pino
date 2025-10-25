@@ -29,6 +29,163 @@ const validateFiles = (files) => {
   return true;
 };
 
+const validateComentarioNombre = (nombre) => {
+  return nombre && nombre.trim().length >= 3 && nombre.trim().length <= 80;
+};
+
+const validateComentarioTexto = (texto) => {
+  return texto && texto.trim().length >= 5;
+};
+
+const validarFormularioComentario = () => {
+  let esValido = true;
+  
+  const errorNombre = document.getElementById('error-nombre');
+  const errorTexto = document.getElementById('error-texto');
+  
+  if (errorNombre) errorNombre.textContent = '';
+  if (errorTexto) errorTexto.textContent = '';
+  
+  const nombre = document.getElementById('nombre').value.trim();
+  const texto = document.getElementById('texto').value.trim();
+  
+  if (!validateComentarioNombre(nombre)) {
+    if (errorNombre) {
+      errorNombre.textContent = 'El nombre debe tener entre 3 y 80 caracteres';
+    }
+    esValido = false;
+  }
+  
+  if (!validateComentarioTexto(texto)) {
+    if (errorTexto) {
+      errorTexto.textContent = 'El comentario debe tener al menos 5 caracteres';
+    }
+    esValido = false;
+  }
+  
+  return esValido;
+};
+
+// ---- FUNCIONES AUXILIARES PARA COMENTARIOS ----
+const mostrarMensaje = (mensaje, tipo) => {
+  const elemento = document.getElementById('mensaje-resultado');
+  if (!elemento) return;
+  
+  elemento.textContent = mensaje;
+  elemento.className = 'mensaje ' + tipo;
+  elemento.style.display = 'block';
+  
+  setTimeout(() => {
+    elemento.style.display = 'none';
+  }, 5000);
+};
+
+const escapeHtml = (text) => {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+};
+
+// ---- FUNCIONES PARA MANEJAR COMENTARIOS ----
+const cargarComentarios = (avisoId) => {
+  fetch(`/api/comentarios/${avisoId}`)
+    .then(response => {
+      if (!response.ok) throw new Error('Error al cargar comentarios');
+      return response.json();
+    })
+    .then(comentarios => {
+      const lista = document.getElementById('lista-comentarios');
+      if (!lista) return;
+      
+      if (comentarios.length === 0) {
+        lista.innerHTML = '<p>No hay comentarios aún. ¡Sé el primero en comentar!</p>';
+      } else {
+        let html = '';
+        comentarios.forEach(comentario => {
+          html += `
+            <div class="comentario">
+              <div class="comentario-header">
+                <strong>${escapeHtml(comentario.nombre)}</strong>
+                <span class="fecha">${comentario.fecha}</span>
+              </div>
+              <div class="comentario-texto">
+                ${escapeHtml(comentario.texto)}
+              </div>
+            </div>
+          `;
+        });
+        lista.innerHTML = html;
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      const lista = document.getElementById('lista-comentarios');
+      if (lista) {
+        lista.innerHTML = '<p class="error">Error al cargar los comentarios</p>';
+      }
+    });
+};
+
+const enviarComentario = (avisoId, formData) => {
+  return fetch(`/api/comentarios/${avisoId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData)
+  })
+  .then(response => {
+    if (!response.ok) {
+      return response.json().then(data => {
+        throw new Error(data.error || 'Error al agregar comentario');
+      });
+    }
+    return response.json();
+  });
+};
+
+// ---- INICIALIZAR COMENTARIOS ----
+const inicializarComentarios = (avisoId) => {
+  cargarComentarios(avisoId);
+  const formComentario = document.getElementById('formComentario');
+  if (formComentario) {
+    formComentario.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      if (!validarFormularioComentario()) {
+        return;
+      }
+      
+      const formData = {
+        nombre: document.getElementById('nombre').value.trim(),
+        texto: document.getElementById('texto').value.trim()
+      };
+      
+      const boton = this.querySelector('button[type="submit"]');
+      const textoOriginal = boton.textContent;
+      boton.textContent = 'Enviando...';
+      boton.disabled = true;
+      
+      enviarComentario(avisoId, formData)
+        .then(data => {
+          mostrarMensaje('¡Comentario agregado exitosamente!', 'success');
+          
+  
+          formComentario.reset();
+          cargarComentarios(avisoId);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          mostrarMensaje(error.message || 'Error al agregar el comentario', 'error');
+        })
+        .finally(() => {
+          boton.textContent = textoOriginal;
+          boton.disabled = false;
+        });
+    });
+  }
+};
+
 // ---- VALIDAR FORMULARIO ----
 const validateForm = () => {
   let myForm = document.forms["myForm"];

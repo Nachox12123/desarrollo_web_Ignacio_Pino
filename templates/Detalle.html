@@ -17,7 +17,7 @@
     <p><strong>Nombre:</strong> {{ aviso.nombre }}</p>
     <p><strong>Contacto:</strong>
       {% for contacto in contactos %}
-        {{ contacto.tipo_contacto }}: {{ contacto.valor }}<br>
+        {{ contacto.nombre }}: {{ contacto.identificador }}<br>
       {% endfor %}
     </p>
     <p><strong>Email:</strong> {{ aviso.email }}</p>
@@ -28,32 +28,77 @@
   <div class="fotos">
     <h3>Fotos:</h3>
     {% for foto in fotos %}
-      <img src="{{ url_for('static', filename='uploads/' ~ foto.filename) }}" alt="Foto de la mascota" onclick="mostrarFoto(this.src)">
+      <img src="{{ url_for('static', filename='uploads/' ~ foto.ruta_archivo) }}" alt="Foto de la mascota" onclick="mostrarFoto(this.src)">
     {% endfor %}
   </div>
 
+  <!-- Sección de comentarios -->
+  <div class="comentarios-section">
+    <h2>Comentarios</h2>
+    
+    <!-- Formulario para agregar comentario -->
+    <div class="comentario-form">
+      <h3>Agregar Comentario</h3>
+      <form id="formComentario">
+        <div class="form-group">
+          <label for="nombre">Nombre:</label>
+          <input type="text" id="nombre" name="nombre" required minlength="3" maxlength="80">
+          <span class="error" id="error-nombre"></span>
+        </div>
+        
+        <div class="form-group">
+          <label for="texto">Comentario:</label>
+          <textarea id="texto" name="texto" rows="4" cols="50" required minlength="5"></textarea>
+          <span class="error" id="error-texto"></span>
+        </div>
+        
+        <button type="submit" class="btn">Agregar comentario</button>
+      </form>
+      
+      <div class="mensaje" id="mensaje-resultado" style="display: none;"></div>
+    </div>
+
+    <!-- Lista de comentarios -->
+    <div class="comentarios-lista">
+      <h3>Comentarios existentes</h3>
+      <div id="lista-comentarios">
+        <p id="loading-comentarios">Cargando comentarios...</p>
+      </div>
+    </div>
+  </div>
+
   <div class="botones">
-   <a href="{{ url_for('listado', page=1) }}" class="btn">Volver al listado</a>
+   <a href="{{ url_for('listado') }}" class="btn">Volver al listado</a>
     <a href="{{ url_for('portada') }}" class="btn">Volver a la portada</a>
   </div>
 
   <div id="modal" style="display:none;">
     <div>
-      <img id="modal-img" src="" alt="Imagen ampliada">
+      <img id="modal-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Imagen ampliada">
       <div style="text-align:center;">
         <button class="btn" onclick="cerrarFoto()">Cerrar</button>
       </div>
     </div>
   </div>
 
+  <script src="{{ url_for('static', filename='js/validation.js') }}"></script>
   <script>
+    const avisoId = {{ aviso.id }};
+
+    // Funciones para fotos
     function mostrarFoto(src) {
       document.getElementById("modal-img").src = src;
       document.getElementById("modal").style.display = "flex";
     }
+    
     function cerrarFoto() {
       document.getElementById("modal").style.display = "none";
     }
+
+    // Inicializar comentarios cuando se carga la página
+    document.addEventListener('DOMContentLoaded', function() {
+      inicializarComentarios(avisoId);
+    });
   </script>
 </body>
 </html>
