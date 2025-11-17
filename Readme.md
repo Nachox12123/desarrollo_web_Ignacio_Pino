@@ -45,3 +45,18 @@ Hola sobre mi tarea 3:
 - Las validaciones de comentarios estan en validation.js para mejor organizacion
 - Los graficos muestran datos de los ultimos 30 dias/12 meses segun corresponda
 
+Hola sobre mi tarea 4:
+
+## Estructura
+- /templates/evaluaciones.html → nueva interfaz que permite evaluar los avisos de adopcion
+- /js/evaluacion.js → implementacion de funcion, validacion
+- /static/css/evaluaciones.css → estilo de la nueva interfaz
+- app.py → Nuevos modelos: Nota y relacion, funciones de calculo de promedios
+
+## Detalles
+- Decidí crear una interfaz nueva para no saturar las que ya estaban en la portada o el detalle
+- la ruta de acceso a esta interfaz de evaluacion es desde la portada en el menu lateral
+- Decicí crear una archivo js aparte por comodidad, ya que los otros estaban muy largos y confusos
+
+
+
