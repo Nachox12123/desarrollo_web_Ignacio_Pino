@@ -71,6 +71,13 @@ class Comentario(db.Model):
     aviso_id = db.Column(db.Integer, db.ForeignKey('aviso_adopcion.id'), nullable=False)
     aviso = db.relationship('AvisoAdopcion', backref='comentarios')
 
+class Nota(db.Model):
+    __tablename__ = 'nota'
+    id = db.Column(db.Integer, primary_key=True)
+    aviso_id = db.Column(db.Integer, db.ForeignKey('aviso_adopcion.id'), nullable=False)
+    nota = db.Column(db.Integer, nullable=False)
+    aviso = db.relationship('AvisoAdopcion', backref='notas')
+
 # ---------------------------
 # RUTAS
 # ---------------------------
@@ -81,6 +88,7 @@ def portada():
     menu = [
         {'nombre': 'Agregar aviso de adopción', 'url': url_for('formulario')},
         {'nombre': 'Ver listado de adopciones', 'url': url_for('listado', page=1)},
+        {'nombre': 'Evaluar avisos', 'url': url_for('evaluaciones')},
         {'nombre': 'Estadísticas', 'url': url_for('estadisticas')}
     ]
     avisos = AvisoAdopcion.query.order_by(AvisoAdopcion.fecha_ingreso.desc()).limit(5).all()
@@ -157,6 +165,22 @@ def detalle_aviso(aviso_id):
 @app.route('/estadisticas')
 def estadisticas():
     return render_template('Estadisticas.html')
+
+@app.route('/evaluaciones')
+def evaluaciones():
+    avisos = db.session.query(
+        AvisoAdopcion,
+        func.avg(Nota.nota).label('promedio_nota')
+    ).outerjoin(Nota, AvisoAdopcion.id == Nota.aviso_id) \
+     .group_by(AvisoAdopcion.id) \
+     .order_by(AvisoAdopcion.fecha_ingreso.desc()).all()
+    
+    avisos_con_promedio = []
+    for aviso, promedio in avisos:
+        aviso.promedio_nota = promedio
+        avisos_con_promedio.append(aviso)
+    
+    return render_template('Evaluaciones.html', avisos=avisos_con_promedio)
 
 
 @app.route('/api/estadisticas/por_dia')
@@ -300,6 +324,51 @@ def agregar_comentario(aviso_id):
             'texto': comentario.texto,
             'fecha': comentario.fecha.strftime('%Y-%m-%d %H:%M:%S'),
             'success': True
+        }), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'Error interno del servidor'}), 500
+
+@app.route('/api/evaluaciones', methods=['POST'])
+def agregar_evaluacion():
+    try:
+        data = request.get_json()
+        
+        if not data or not isinstance(data, dict):
+            return jsonify({'error': 'Datos inválidos'}), 400
+        
+        aviso_id = data.get('aviso_id')
+        nota_valor = data.get('nota')
+        
+        if not aviso_id or not nota_valor:
+            return jsonify({'error': 'aviso_id y nota son requeridos'}), 400
+        
+        try:
+            nota_valor = int(nota_valor)
+            if nota_valor < 1 or nota_valor > 7:
+                return jsonify({'error': 'La nota debe ser un número entero entre 1 y 7'}), 400
+        except (ValueError, TypeError):
+            return jsonify({'error': 'La nota debe ser un número entero entre 1 y 7'}), 400
+        
+        aviso = AvisoAdopcion.query.get(aviso_id)
+        if not aviso:
+            return jsonify({'error': 'El aviso no existe'}), 404
+        
+        nueva_nota = Nota(
+            aviso_id=aviso_id,
+            nota=nota_valor
+        )
+        
+        db.session.add(nueva_nota)
+        db.session.commit()
+        
+        promedio = db.session.query(func.avg(Nota.nota)).filter_by(aviso_id=aviso_id).scalar()
+        
+        return jsonify({
+            'success': True,
+            'mensaje': 'Evaluación agregada correctamente',
+            'nuevo_promedio': round(float(promedio), 1) if promedio else 0
         }), 201
         
     except Exception as e:
