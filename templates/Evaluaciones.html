@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Evaluaciones de Adopciones</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/Evaluaciones.css') }}">
+</head>
+<body>
+  <h1>Evaluaciones de Avisos de Adopción</h1>
+  
+  <nav>
+    <ul>
+      <li><a href="{{ url_for('portada') }}">Volver al inicio</a></li>
+      <li><a href="{{ url_for('listado', page=1) }}">Ver listado</a></li>
+      <li><a href="{{ url_for('formulario') }}">Agregar aviso</a></li>
+    </ul>
+  </nav>
+
+  <h2>Evaluar avisos de adopción</h2>
+  
+  <table id="evaluaciones-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Fecha publicación</th>
+        <th>Sector</th>
+        <th>Cantidad</th>
+        <th>Tipo</th>
+        <th>Edad</th>
+        <th>Comuna</th>
+        <th>Nota</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for aviso in avisos %}
+      <tr>
+        <td>{{ aviso.id }}</td>
+        <td>{{ aviso.fecha_ingreso.strftime('%Y-%m-%d') }}</td>
+        <td>{{ aviso.sector }}</td>
+        <td>{{ aviso.cantidad }}</td>
+        <td>{{ aviso.tipo }}</td>
+        <td>{{ aviso.edad }} {{ aviso.unidad_medida }}</td>
+        <td>{{ aviso.comuna.nombre }}</td>
+        <td id="nota-{{ aviso.id }}">
+          {% if aviso.promedio_nota %}
+            {{ "%.1f"|format(aviso.promedio_nota) }}
+          {% else %}
+            -
+          {% endif %}
+        </td>
+        <td>
+          <button class="evaluar-btn" onclick="evaluarAviso({{ aviso.id }})">evaluar</button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div id="modal-evaluacion" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3>Evaluar aviso de adopción</h3>
+      <p>Selecciona una nota entre 1 y 7:</p>
+      <div class="rating-buttons">
+        <button class="rating-btn" data-nota="1">1</button>
+        <button class="rating-btn" data-nota="2">2</button>
+        <button class="rating-btn" data-nota="3">3</button>
+        <button class="rating-btn" data-nota="4">4</button>
+        <button class="rating-btn" data-nota="5">5</button>
+        <button class="rating-btn" data-nota="6">6</button>
+        <button class="rating-btn" data-nota="7">7</button>
+      </div>
+      <div id="mensaje-evaluacion" class="mensaje"></div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/evaluacion.js') }}"></script>
+</body>
+</html>
