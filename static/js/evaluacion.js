@@ -91,6 +91,16 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
     
+    // Event delegation for evaluate buttons using data attributes
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('evaluar-btn')) {
+            const avisoId = event.target.getAttribute('data-aviso-id');
+            if (avisoId) {
+                evaluarAviso(parseInt(avisoId));
+            }
+        }
+    });
+    
     const ratingButtons = document.querySelectorAll('.rating-btn');
     ratingButtons.forEach(button => {
         button.addEventListener('click', function() {

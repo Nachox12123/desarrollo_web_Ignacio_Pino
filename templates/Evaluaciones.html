@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title>Evaluaciones de Adopciones</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/Evaluaciones.css') }}">
+  <link rel="stylesheet" href="../static/css/Evaluaciones.css">
 </head>
 <body>
   <h1>Evaluaciones de Avisos de Adopción</h1>
   
   <nav>
     <ul>
-      <li><a href="{{ url_for('portada') }}">Volver al inicio</a></li>
-      <li><a href="{{ url_for('listado', page=1) }}">Ver listado</a></li>
-      <li><a href="{{ url_for('formulario') }}">Agregar aviso</a></li>
+      <li><a href="../">Volver al inicio</a></li>
+      <li><a href="../listado/1">Ver listado</a></li>
+      <li><a href="../formulario">Agregar aviso</a></li>
     </ul>
   </nav>
 
@@ -50,7 +50,7 @@
           {% endif %}
         </td>
         <td>
-          <button class="evaluar-btn" onclick="evaluarAviso({{ aviso.id }})">evaluar</button>
+          <button class="evaluar-btn" data-aviso-id="3">evaluar</button>
         </td>
       </tr>
       {% endfor %}
@@ -75,6 +75,6 @@
     </div>
   </div>
 
-  <script src="{{ url_for('static', filename='js/evaluacion.js') }}"></script>
+  <script src="../static/js/evaluacion.js"></script>
 </body>
 </html>
